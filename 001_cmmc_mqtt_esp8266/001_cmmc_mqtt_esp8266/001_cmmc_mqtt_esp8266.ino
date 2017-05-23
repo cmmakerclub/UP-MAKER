@@ -83,7 +83,7 @@ void reconnect() {
       // Once connected, publish an announcement...
       client.publish("outTopic", "hello world");
       // ... and resubscribe
-      client.subscribe("CMMC/plug001/command");
+      client.subscribe("CMMC/plug001");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
