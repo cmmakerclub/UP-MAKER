@@ -12,6 +12,9 @@ const char* ssid = "ESPERT-3020";
 const char* password = "espertap";
 const char* mqtt_server = "mqtt.cmmc.io";
 
+#define inTopic "CMMC/plug001"
+#define outTopic "CMMC/plug001/outTopic"
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 long lastMsg = 0;
@@ -81,9 +84,9 @@ void reconnect() {
       Serial.println("connected");
       blinker.detach(HIGH);
       // Once connected, publish an announcement...
-      client.publish("outTopic", "hello world");
+      client.publish(outTopic, "hello world");
       // ... and resubscribe
-      client.subscribe("CMMC/plug001");
+      client.subscribe(inTopic);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -108,6 +111,6 @@ void loop() {
     snprintf (msg, 75, "hello world #%ld", value);
     Serial.print("Publish message: ");
     Serial.println(msg);
-    client.publish("outTopic", msg);
+    client.publish(outTopic, msg);
   }
 }
