@@ -79,8 +79,10 @@ void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
+    String clientId = String(ESP.getChipId());
     // Attempt to connect
-    if (client.connect("ESP8266Client")) {
+    if (client.connect(clientId.c_str())) {
+
       Serial.println("connected");
       blinker.detach(HIGH);
       // Once connected, publish an announcement...

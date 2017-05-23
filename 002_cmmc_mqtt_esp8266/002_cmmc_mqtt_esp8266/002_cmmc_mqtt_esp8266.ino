@@ -12,8 +12,8 @@ const char* ssid = "ESPERT-3020";
 const char* password = "espertap";
 const char* mqtt_server = "mqtt.cmmc.io";
 
-#define inTopic "CMMC/plug001"
-#define outTopic "CMMC/plug001/outTopic"
+#define inTopic "CMMC/plug002"
+#define outTopic "CMMC/plug002/outTopic"
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -58,13 +58,19 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
+
+  payload[length] = '\0';
+  String payloadString = String((char*)payload);
+
   for (int i = 0; i < length; i++) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
 
+
+
   // Switch on the LED if an 1 was received as first character
-  if ((char)payload[0] == '1') {
+  if (payloadString == "ON") {
     digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
     digitalWrite(relayPin, HIGH);
     // but actually the LED is on; this is because
@@ -79,8 +85,9 @@ void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
+    String clientId = String(ESP.getChipId());
     // Attempt to connect
-    if (client.connect("ESP8266Client")) {
+    if (client.connect(clientId.c_str())) {
       Serial.println("connected");
       blinker.detach(HIGH);
       // Once connected, publish an announcement...
