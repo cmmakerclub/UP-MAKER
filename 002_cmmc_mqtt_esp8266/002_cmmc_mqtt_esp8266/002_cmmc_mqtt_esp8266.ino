@@ -75,7 +75,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     digitalWrite(relayPin, HIGH);
     // but actually the LED is on; this is because
     // it is acive low on the ESP-01)
-  } else {
+  } else if (payloadString == "OFF"){
     digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
     digitalWrite(relayPin, LOW);
   }
